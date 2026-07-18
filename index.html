@@ -6,7 +6,7 @@
 <title>Kaam</title>
 <meta name="description" content="Kaam — punch tasks in fast, stamp them done.">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#14171F">
+<meta name="theme-color" content="#152447">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,17 +18,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#14171F; --surface:#1C2029; --surface-2:#242938; --surface-3:#2C3244;
-    --ink:#F0EDE6; --ink-dim:#9AA0AE; --ink-faint:#5B6272;
-    --accent:#F5A623; --accent2:#FF6F61; --accent-ink:#14171F; --teal:#2DD4BF; --rose:#E8615C; --violet:#8B7FE8;
+    --bg:#10131A; --surface:#1A1E29; --surface-2:#212637; --surface-3:#2A3145;
+    --ink:#F3F1EA; --ink-dim:#9AA1B2; --ink-faint:#5B6272;
+    --accent:#F0B429; --accent2:#F6D174; --accent-ink:#1B1400;
+    --navy:#152447; --navy2:#28407A; --teal:#2DD4BF; --rose:#E8615C; --violet:#8B7FE8;
     --border:rgba(240,237,230,0.09); --shadow:0 8px 24px rgba(0,0,0,0.35); --radius:14px;
     --safe-b: env(safe-area-inset-bottom, 0px); --safe-t: env(safe-area-inset-top, 0px);
+    color-scheme: dark;
   }
   [data-theme="light"]{
     --bg:#FAF7F0; --surface:#FFFFFF; --surface-2:#F2ECDE; --surface-3:#E9E1CE;
     --ink:#1C2029; --ink-dim:#6B7280; --ink-faint:#9CA3AF;
-    --accent:#C9790C; --accent2:#E85D4A; --accent-ink:#FFFFFF; --teal:#0F8C7E; --rose:#C7433D; --violet:#6C5CE7;
+    --accent:#C9790C; --accent2:#E8A93F; --accent-ink:#FFFFFF;
+    --teal:#0F8C7E; --rose:#C7433D; --violet:#6C5CE7;
     --border:rgba(28,32,41,0.09); --shadow:0 8px 24px rgba(28,32,41,0.08);
+    color-scheme: light;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html{height:100%;}
@@ -43,23 +47,27 @@
   .display{font-family:'Fraunces',serif;}
   #app{max-width:960px;margin:0 auto;height:100%;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;}
 
-  header.topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + var(--safe-t)) 20px 10px 20px;flex-shrink:0;}
-  .brand{display:flex;align-items:baseline;gap:10px;}
-  .brand h1{font-family:'Fraunces',serif;font-weight:800;font-size:26px;margin:0;letter-spacing:-0.5px;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-  .brand .tagline{font-size:11px;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;}
-  .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex-shrink:0;}
-  .icon-btn:hover{color:var(--ink);border-color:var(--ink-faint);}
+  /* ---- hero (brand + tabs) ---- */
+  .hero{flex-shrink:0;background:linear-gradient(135deg,var(--navy),var(--navy2) 75%);border-radius:0 0 22px 22px;padding-bottom:6px;box-shadow:0 6px 18px rgba(0,0,0,.25);}
+  header.topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + var(--safe-t)) 20px 8px 20px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{width:34px;height:34px;border-radius:9px;display:block;}
+  .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+  .brand h1{font-family:'Fraunces',serif;font-weight:800;font-size:22px;margin:0;letter-spacing:-0.3px;color:#fff;}
+  .brand .tagline{font-size:10.5px;color:rgba(255,255,255,.6);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;}
+  .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex-shrink:0;}
+  .icon-btn:hover{color:#fff;border-color:rgba(255,255,255,.35);}
   .icon-btn:active{transform:scale(.92);}
   .icon-btn.on{color:var(--accent);border-color:var(--accent);}
   .header-actions{display:flex;gap:8px;}
 
-  nav.tabs{display:flex;gap:6px;padding:4px 20px 14px 20px;overflow-x:auto;flex-shrink:0;}
-  .tab{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink-dim);cursor:pointer;white-space:nowrap;border:1px solid transparent;transition:.15s;}
-  .tab:hover{color:var(--ink);}
+  nav.tabs{display:flex;gap:6px;padding:6px 20px 14px 20px;overflow-x:auto;}
+  .tab{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;color:rgba(255,255,255,.65);cursor:pointer;white-space:nowrap;border:1px solid transparent;transition:.15s;}
+  .tab:hover{color:#fff;}
   .tab.active{background:linear-gradient(120deg,var(--accent),var(--accent2));color:var(--accent-ink);}
   .tab:active{transform:scale(.96);}
 
-  .quickadd-wrap{padding:0 20px 14px 20px;flex-shrink:0;}
+  .quickadd-wrap{padding:14px 20px 14px 20px;flex-shrink:0;}
   .quickadd{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);}
   .quickadd.focused{border-color:var(--accent);}
   .quickadd input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-size:15px;font-family:'Inter',sans-serif;min-width:0;}
@@ -74,6 +82,8 @@
   .filterbar input[type=text]{width:150px;}
   .chip-toggle{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface);font-size:12.5px;cursor:pointer;color:var(--ink-dim);user-select:none;}
   .chip-toggle.active{background:var(--rose);color:#fff;border-color:var(--rose);}
+  .active-filter-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;color:var(--ink-dim);}
+  .active-filter-banner button{background:none;border:none;color:var(--accent);font-weight:700;cursor:pointer;font-size:12.5px;}
 
   .section-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;margin:22px 0 10px 4px;}
   .section-label:first-child{margin-top:0;}
@@ -98,7 +108,7 @@
   .pill.cat{background:rgba(45,212,191,0.15);color:var(--teal);}
   .pill.due{background:var(--surface-3);color:var(--ink-dim);}
   .pill.due.overdue{background:rgba(232,97,92,0.18);color:var(--rose);}
-  .pill.due.today{background:rgba(245,166,35,0.18);color:var(--accent);}
+  .pill.due.today{background:rgba(240,180,41,0.18);color:var(--accent);}
   .pill.recur{color:var(--ink-faint);}
   .task-actions{display:flex;gap:4px;flex-shrink:0;}
   .task-actions button{background:none;border:none;color:var(--ink-faint);cursor:pointer;padding:4px;border-radius:6px;}
@@ -135,9 +145,15 @@
 
   .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
   @media(max-width:720px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
-  .stat-card .num{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1;}
-  .stat-card .lbl{font-size:11px;color:var(--ink-dim);margin-top:6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:transform .12s ease,border-color .12s ease;}
+  .stat-card:hover{border-color:var(--ink-faint);}
+  .stat-card:active{transform:scale(.96);}
+  .stat-card .badge{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:8px;}
+  .stat-card.accent .badge{background:rgba(240,180,41,.16);}
+  .stat-card.rose .badge{background:rgba(232,97,92,.16);}
+  .stat-card.teal .badge{background:rgba(45,212,191,.16);}
+  .stat-card .num{font-family:'Fraunces',serif;font-size:28px;font-weight:600;line-height:1;}
+  .stat-card .lbl{font-size:10.5px;color:var(--ink-dim);margin-top:6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;}
   .stat-card.accent .num{color:var(--accent);}
   .stat-card.rose .num{color:var(--rose);}
   .stat-card.teal .num{color:var(--teal);}
@@ -153,7 +169,9 @@
 
   .donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
   .legend{display:flex;flex-direction:column;gap:8px;font-size:12.5px;}
-  .legend-item{display:flex;align-items:center;gap:7px;}
+  .legend-item{display:flex;align-items:center;gap:7px;cursor:pointer;padding:3px 6px;margin:-3px -6px;border-radius:7px;transition:background .12s;}
+  .legend-item:hover{background:var(--surface-2);}
+  .legend-item:active{transform:scale(.97);}
   .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 
   .ledger{display:flex;gap:5px;flex-wrap:wrap;}
@@ -222,7 +240,10 @@
   .due-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
   .due-row button{padding:9px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-dim);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
   .due-row button.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
-  .due-row input[type=date]{background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px;border-radius:9px;font-size:12px;font-family:'Inter',sans-serif;}
+  .date-wrap{position:relative;display:inline-flex;align-items:center;}
+  .date-wrap svg{position:absolute;left:9px;pointer-events:none;color:var(--ink-dim);}
+  .due-row input[type=date]{background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px 8px 8px 30px;border-radius:9px;font-size:12px;font-family:'Inter',sans-serif;}
+  input[type=date]::-webkit-calendar-picker-indicator{opacity:0.75;cursor:pointer;}
   .tag-input-row{display:flex;gap:6px;margin-bottom:8px;}
   .tag-input-row input{flex:1;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:9px 10px;border-radius:9px;font-size:13px;font-family:'Inter',sans-serif;}
   .tag-chips{display:flex;gap:6px;flex-wrap:wrap;}
@@ -230,8 +251,19 @@
   .tag-chip button{background:none;border:none;color:var(--ink-faint);cursor:pointer;padding:0;font-size:14px;line-height:1;}
   .sheet-footer{display:flex;gap:10px;margin-top:18px;}
   .btn-secondary{flex:1;background:var(--surface-2);color:var(--ink-dim);border:1px solid var(--border);border-radius:12px;padding:13px;font-weight:600;cursor:pointer;font-size:14px;}
-  .btn-cta{flex:2;background:linear-gradient(120deg,var(--accent),var(--accent2));color:var(--accent-ink);border:none;border-radius:12px;padding:13px;font-weight:800;cursor:pointer;font-size:14.5px;box-shadow:0 6px 18px rgba(245,166,35,.3);}
+  .btn-cta{flex:2;background:linear-gradient(120deg,var(--accent),var(--accent2));color:var(--accent-ink);border:none;border-radius:12px;padding:13px;font-weight:800;cursor:pointer;font-size:14.5px;box-shadow:0 6px 18px rgba(240,180,41,.3);}
   .btn-cta:active,.btn-secondary:active{transform:scale(.97);}
+
+  /* ---- confirm dialog (delete etc.) ---- */
+  .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:320;display:flex;align-items:center;justify-content:center;padding:24px;animation:overlayin .18s ease;}
+  .confirm-card{width:100%;max-width:340px;background:var(--surface);border-radius:18px;padding:22px 20px;box-shadow:0 12px 32px rgba(0,0,0,.4);animation:popin .18s cubic-bezier(.22,1,.36,1);}
+  @keyframes popin{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .confirm-icon{width:46px;height:46px;border-radius:12px;background:rgba(232,97,92,.15);color:var(--rose);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .confirm-card h3{font-family:'Fraunces',serif;font-size:17px;margin:0 0 6px 0;}
+  .confirm-card p{font-size:13px;color:var(--ink-dim);margin:0 0 18px 0;line-height:1.4;}
+  .confirm-card .sheet-footer{margin-top:0;}
+  .btn-danger{flex:1;background:var(--rose);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;font-size:13.5px;}
+  .btn-danger:active{transform:scale(.97);}
 </style>
 </head>
 <body>
@@ -272,7 +304,7 @@ const state = {
   darkMode: true,
   tasks: [],
   view: 'dashboard',
-  filters: { search:'', category:'all', tag:'all', priority:'all', status:'all', overdueOnly:false },
+  filters: { search:'', category:'all', tag:'all', priority:'all', status:'all', overdueOnly:false, completedToday:false, dueSoon:false },
   calendarMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   selectedDay: null,
   locked: false,
@@ -285,8 +317,8 @@ const state = {
   composerOpen: false,
   editingId: null,
   editDraft: null,
+  pendingDeleteId: null,
   draft: { title:'', category:'', newCategory:false, priority:'med', due:null, dueChip:null, recurrence:'none', tags:[] },
-  streakJustBumped: false,
 };
 let autoFocusQuickAdd = false;
 let lastDeleted = null;
@@ -315,6 +347,7 @@ async function loadState(){
   state.pinFlow = state.pin ? 'enter' : null;
   state.loaded = true;
   autoFocusQuickAdd = true;
+  try{ history.replaceState({ kaamBase:true }, ''); }catch(e){}
   render();
 }
 
@@ -341,6 +374,26 @@ document.addEventListener('visibilitychange', ()=>{
 });
 window.addEventListener('pagehide', ()=>{ if(state.pin) { state.locked = true; } });
 
+/* ============================================================
+   IN-APP BACK NAVIGATION
+   Every time we open an overlay (composer / delete-confirm / edit)
+   or leave the dashboard, we push a history entry. The hardware
+   / gesture back button then closes that layer instead of exiting
+   the app, and only exits once nothing is left to unwind.
+   ============================================================ */
+function pushNavState(tag){
+  try{ history.pushState({ kaamLayer: tag }, ''); }catch(e){}
+}
+window.addEventListener('popstate', ()=>{
+  if(state.locked) return; /* let the OS handle back on the lock screen */
+  if(state.composerOpen){ state.composerOpen = false; render(); return; }
+  if(state.pendingDeleteId){ state.pendingDeleteId = null; render(); return; }
+  if(state.editingId){ state.editingId = null; state.editDraft = null; render(); return; }
+  if(state.selectedDay){ state.selectedDay = null; render(); return; }
+  if(state.view !== 'dashboard'){ state.view = 'dashboard'; render(); return; }
+  /* nothing left to unwind inside the app — allow the platform default (exit/minimize) */
+});
+
 /* ============================= DUE DATE HELPERS ============================= */
 function computeDueChip(chip){
   const d = new Date();
@@ -354,6 +407,7 @@ function nextDueDate(iso, recurrence){
   if(recurrence==='daily') d.setDate(d.getDate()+1);
   else if(recurrence==='weekly') d.setDate(d.getDate()+7);
   else if(recurrence==='monthly') d.setMonth(d.getMonth()+1);
+  else if(recurrence==='yearly') d.setFullYear(d.getFullYear()+1);
   return d.toISOString().slice(0,10);
 }
 
@@ -367,6 +421,7 @@ function openComposer(){
   if(input) state.draft.title = input.value;
   if(!state.draft.title.trim()){ if(input) input.focus(); return; }
   state.composerOpen = true;
+  pushNavState('composer');
   render();
 }
 function closeComposer(){
@@ -439,11 +494,20 @@ function setStatus(id, status){
   persist(); render();
 }
 
-function deleteTaskWithUndo(id){
+function requestDelete(id){
+  state.pendingDeleteId = id;
+  pushNavState('delete-confirm');
+  render();
+}
+function cancelDelete(){ state.pendingDeleteId = null; render(); }
+function confirmDelete(){
+  const id = state.pendingDeleteId;
+  if(!id) return;
   const idx = state.tasks.findIndex(t=>t.id===id);
-  if(idx===-1) return;
+  if(idx===-1){ state.pendingDeleteId=null; render(); return; }
   const removed = state.tasks.splice(idx,1)[0];
   lastDeleted = { task: removed, index: idx };
+  state.pendingDeleteId = null;
   persist(); render();
   vibrate(15);
   showUndoToast('Deleted: ' + removed.title);
@@ -466,7 +530,7 @@ function playStamp(){
 }
 
 function burstConfetti(originEl){
-  const colors = ['#F5A623','#FF6F61','#2DD4BF','#8B7FE8','#E8615C'];
+  const colors = ['#F0B429','#F6D174','#2DD4BF','#8B7FE8','#E8615C'];
   let x = window.innerWidth/2, y = window.innerHeight/2;
   if(originEl && originEl.getBoundingClientRect){
     const r = originEl.getBoundingClientRect();
@@ -539,6 +603,19 @@ function categoryBreakdown(){
 /* ============================= HELPERS ============================= */
 function allCategories(){ return [...new Set(state.tasks.map(t=>t.category).filter(Boolean))].sort(); }
 function isOverdue(t){ return t.due && t.status!=='done' && daysDiff(t.due) < 0; }
+function isDueSoon(t){ return t.due && t.status!=='done' && daysDiff(t.due)>=0 && daysDiff(t.due)<=7; }
+
+function resetFilters(){
+  state.filters = { search:'', category:'all', tag:'all', priority:'all', status:'all', overdueOnly:false, completedToday:false, dueSoon:false };
+}
+
+function goToFilteredList(patch){
+  resetFilters();
+  Object.assign(state.filters, patch);
+  state.view = 'list';
+  pushNavState('view:list');
+  render();
+}
 
 function filteredTasks(){
   return state.tasks.filter(t=>{
@@ -549,14 +626,25 @@ function filteredTasks(){
     if(f.priority!=='all' && t.priority!==f.priority) return false;
     if(f.status!=='all' && t.status!==f.status) return false;
     if(f.overdueOnly && !isOverdue(t)) return false;
+    if(f.completedToday && !(t.completedAt && t.completedAt.slice(0,10)===todayISO())) return false;
+    if(f.dueSoon && !isDueSoon(t)) return false;
     return true;
   });
 }
+function activeFilterLabel(){
+  const f = state.filters;
+  if(f.completedToday) return 'Stamped today';
+  if(f.overdueOnly) return 'Overdue';
+  if(f.dueSoon) return 'Due in the next 7 days';
+  if(f.category!=='all') return 'Category: ' + f.category;
+  if(f.status==='done') return 'Completed';
+  return null;
+}
 
 const PRIORITY_COLOR = { high:'var(--rose)', med:'var(--accent)', low:'var(--teal)' };
-const CAT_PALETTE = ['#2DD4BF','#F5A623','#E8615C','#8B7FE8','#5FB0F0','#E894C4','#9CCB6E'];
+const CAT_PALETTE = ['#2DD4BF','#F0B429','#E8615C','#8B7FE8','#5FB0F0','#E894C4','#9CCB6E'];
 const PRIORITY_LABEL = { high:'High priority', med:'Medium priority', low:'Low priority' };
-const RECUR_LABEL = { none:'', daily:'Repeats daily', weekly:'Repeats weekly', monthly:'Repeats monthly' };
+const RECUR_LABEL = { none:'', daily:'Repeats daily', weekly:'Repeats weekly', monthly:'Repeats monthly', yearly:'Repeats yearly' };
 
 function dueLabel(t){
   if(!t.due) return null;
@@ -583,30 +671,32 @@ function render(){
     return;
   }
   root.innerHTML = `
-    ${renderHeader()}
-    ${renderTabs()}
+    ${renderHero()}
     ${renderQuickAdd()}
     <main>
       ${state.storageWarning ? `<div class="storage-banner">Heads up: this browser is blocking storage, so tasks may not survive a refresh. Try a normal (non-private) browser tab.</div>` : ''}
       ${renderView()}
     </main>
+    ${state.composerOpen ? renderComposerSheet() : ''}
+    ${state.pendingDeleteId ? renderDeleteConfirm() : ''}
   `;
   attachGlobalEvents();
-  if(state.composerOpen){
-    document.body.insertAdjacentHTML('beforeend', renderComposerSheet());
-    attachComposerEvents();
-  }
+  if(state.composerOpen) attachComposerEvents();
+  if(state.pendingDeleteId) attachDeleteConfirmEvents();
 }
 
-function renderHeader(){
+function renderHero(){
   return `
-  <header class="topbar">
-    <div class="brand"><h1>Kaam</h1><span class="tagline">work, logged</span></div>
-    <div class="header-actions">
-      <button class="icon-btn" id="btn-theme" title="Toggle theme">${state.darkMode? sunIcon() : moonIcon()}</button>
-      <button class="icon-btn" id="btn-lock" title="Lock">${lockIcon()}</button>
-    </div>
-  </header>`;
+  <div class="hero">
+    <header class="topbar">
+      <div class="brand"><img src="icon-192.png" alt="Kaam"><div class="brand-text"><h1>Kaam</h1><span class="tagline">work, logged</span></div></div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-theme" title="Toggle theme">${state.darkMode? sunIcon() : moonIcon()}</button>
+        <button class="icon-btn" id="btn-lock" title="Lock">${lockIcon()}</button>
+      </div>
+    </header>
+    ${renderTabs()}
+  </div>`;
 }
 
 function renderTabs(){
@@ -661,7 +751,7 @@ function renderComposerSheet(){
           <button data-due="today" class="${d.dueChip==='today'?'active':''}">Today</button>
           <button data-due="tomorrow" class="${d.dueChip==='tomorrow'?'active':''}">Tomorrow</button>
           <button data-due="nextweek" class="${d.dueChip==='nextweek'?'active':''}">Next week</button>
-          <input type="date" id="d-due-custom" value="${d.dueChip==='custom' && d.due ? d.due : ''}" />
+          <div class="date-wrap">${calendarIcon()}<input type="date" id="d-due-custom" value="${d.dueChip==='custom' && d.due ? d.due : ''}" /></div>
           ${d.due ? `<button data-due="clear" style="color:var(--rose);border-color:var(--rose);">Clear</button>` : ''}
         </div>
       </div>
@@ -673,6 +763,7 @@ function renderComposerSheet(){
           <option value="daily" ${d.recurrence==='daily'?'selected':''}>Daily</option>
           <option value="weekly" ${d.recurrence==='weekly'?'selected':''}>Weekly</option>
           <option value="monthly" ${d.recurrence==='monthly'?'selected':''}>Monthly</option>
+          <option value="yearly" ${d.recurrence==='yearly'?'selected':''}>Yearly</option>
         </select>
       </div>
 
@@ -705,8 +796,8 @@ function attachComposerEvents(){
   const overlay = document.getElementById('sheet-overlay');
   if(!overlay) return;
   overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeComposer(); });
-  document.getElementById('sheet-cancel')?.addEventListener('click', closeComposer);
-  document.getElementById('sheet-confirm')?.addEventListener('click', confirmAddFromComposer);
+  document.getElementById('sheet-cancel')?.addEventListener('click', (e)=>{ e.preventDefault(); closeComposer(); });
+  document.getElementById('sheet-confirm')?.addEventListener('click', (e)=>{ e.preventDefault(); confirmAddFromComposer(); });
 
   const titleInput = document.getElementById('sheet-title-input');
   if(titleInput){
@@ -761,6 +852,31 @@ function attachComposerEvents(){
   });
 }
 
+/* ============================= DELETE CONFIRM DIALOG ============================= */
+function renderDeleteConfirm(){
+  const task = state.tasks.find(t=>t.id===state.pendingDeleteId);
+  const title = task ? task.title : 'this task';
+  return `
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-card">
+      <div class="confirm-icon">${trashIcon()}</div>
+      <h3>Delete this task?</h3>
+      <p>“${escapeHTML(title)}” will be removed. You'll get a few seconds to undo it right after.</p>
+      <div class="sheet-footer">
+        <button class="btn-secondary" id="confirm-cancel">Cancel</button>
+        <button class="btn-danger" id="confirm-delete">Delete</button>
+      </div>
+    </div>
+  </div>`;
+}
+function attachDeleteConfirmEvents(){
+  const overlay = document.getElementById('confirm-overlay');
+  if(!overlay) return;
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) cancelDelete(); });
+  document.getElementById('confirm-cancel')?.addEventListener('click', (e)=>{ e.preventDefault(); cancelDelete(); });
+  document.getElementById('confirm-delete')?.addEventListener('click', (e)=>{ e.preventDefault(); confirmDelete(); });
+}
+
 /* ============================= VIEW ROUTER ============================= */
 function renderView(){
   if(state.view==='dashboard') return renderDashboard();
@@ -780,7 +896,7 @@ function renderLock(){
   const len = state.pinDraft.length;
   return `
   <div class="lock-screen">
-    <div class="empty-state" style="padding:0;"><div class="stamp-ring">局</div></div>
+    <div class="empty-state" style="padding:0;"><img src="icon-192.png" alt="Kaam" style="width:64px;height:64px;border-radius:16px;"></div>
     <div class="lock-title">${title}</div>
     <div class="lock-sub">${sub}</div>
     <div class="pin-dots">${[0,1,2,3].map(i=>`<div class="pin-dot ${i<len?'filled':''} ${state.pinError?'error':''}"></div>`).join('')}</div>
@@ -842,7 +958,7 @@ function renderDashboard(){
   const completedToday = state.tasks.filter(t=>t.completedAt && t.completedAt.slice(0,10)===todayISO()).length;
   const streak = computeStreak();
   const overdue = state.tasks.filter(isOverdue).length;
-  const upcoming = state.tasks.filter(t=>t.due && t.status!=='done' && daysDiff(t.due)>=0 && daysDiff(t.due)<=7).length;
+  const upcoming = state.tasks.filter(isDueSoon).length;
   const week = last7DaysCounts();
   const maxCount = Math.max(1, ...week.map(w=>w.count));
   const cats = categoryBreakdown().slice(0,6);
@@ -859,17 +975,17 @@ function renderDashboard(){
   <div class="fade-in">
     <div class="section-label" style="margin-top:14px;">${greeting}</div>
     <div class="stat-grid">
-      <div class="stat-card accent"><div class="num mono">${completedToday}</div><div class="lbl">Stamped today</div></div>
-      <div class="stat-card"><div class="num mono">${streak}🔥</div><div class="lbl">Day streak</div></div>
-      <div class="stat-card rose"><div class="num mono">${overdue}</div><div class="lbl">Overdue</div></div>
-      <div class="stat-card teal"><div class="num mono">${upcoming}</div><div class="lbl">Due in 7 days</div></div>
+      <div class="stat-card accent" data-stat="stamped-today"><div class="badge">🎯</div><div class="num mono">${completedToday}</div><div class="lbl">Stamped today</div></div>
+      <div class="stat-card" data-stat="streak"><div class="badge">🔥</div><div class="num mono">${streak}</div><div class="lbl">Day streak</div></div>
+      <div class="stat-card rose" data-stat="overdue"><div class="badge">⏰</div><div class="num mono">${overdue}</div><div class="lbl">Overdue</div></div>
+      <div class="stat-card teal" data-stat="due-soon"><div class="badge">📅</div><div class="num mono">${upcoming}</div><div class="lbl">Due in 7 days</div></div>
     </div>
     <div class="panel"><h3>This week's stamps</h3>
       <div class="bar-chart">${week.map(w=>`<div class="bar-col"><div class="bar" style="height:100%;"><div class="fill" style="height:${(w.count/maxCount*100) || 2}%;"></div></div><div class="bar-lbl">${w.label}</div></div>`).join('')}</div>
     </div>
     <div class="panel"><h3>14-day ledger</h3><div class="ledger">${last14.map(f=>`<div class="ledger-cell ${f?'filled':''}"></div>`).join('')}</div></div>
     <div class="panel"><h3>Open work by category</h3>
-      ${cats.length ? `<div class="donut-wrap">${donutSVG(cats, totalOpen)}<div class="legend">${cats.map((c,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${CAT_PALETTE[i%CAT_PALETTE.length]}"></div>${c[0]} <span class="mono" style="color:var(--ink-faint)">${c[1]}</span></div>`).join('')}</div></div>`
+      ${cats.length ? `<div class="donut-wrap">${donutSVG(cats, totalOpen)}<div class="legend">${cats.map((c,i)=>`<div class="legend-item" data-cat="${escapeHTML(c[0])}"><div class="legend-dot" style="background:${CAT_PALETTE[i%CAT_PALETTE.length]}"></div>${c[0]} <span class="mono" style="color:var(--ink-faint)">${c[1]}</span></div>`).join('')}</div></div>`
       : `<div class="empty-state" style="padding:20px;"><p>Nothing open yet. Add a task to see it here.</p></div>`}
     </div>
     <div class="panel"><h3>Recently stamped</h3>
@@ -920,7 +1036,7 @@ function taskEditFormHTML(t){
           <option value="" ${!d.category?'selected':''}>No category</option>
           ${cats.map(c=>`<option value="${c}" ${d.category===c?'selected':''}>${c}</option>`).join('')}
         </select>
-        <input type="date" id="e-due" value="${d.due||''}" style="background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:9px 10px;border-radius:9px;font-size:13px;" />
+        <div class="date-wrap">${calendarIcon()}<input type="date" id="e-due" value="${d.due||''}" style="background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:9px 10px 9px 30px;border-radius:9px;font-size:13px;" /></div>
       </div>
       <div class="field-group">
         <div class="segmented" id="e-priority">
@@ -928,6 +1044,16 @@ function taskEditFormHTML(t){
           <button data-p="med" class="${d.priority==='med'?'active med':''}">Medium</button>
           <button data-p="high" class="${d.priority==='high'?'active high':''}">High</button>
         </div>
+      </div>
+      <div class="field-group">
+        <label>Repeats</label>
+        <select class="field-select" id="e-recurrence">
+          <option value="none" ${d.recurrence==='none'?'selected':''}>Does not repeat</option>
+          <option value="daily" ${d.recurrence==='daily'?'selected':''}>Daily</option>
+          <option value="weekly" ${d.recurrence==='weekly'?'selected':''}>Weekly</option>
+          <option value="monthly" ${d.recurrence==='monthly'?'selected':''}>Monthly</option>
+          <option value="yearly" ${d.recurrence==='yearly'?'selected':''}>Yearly</option>
+        </select>
       </div>
       <div class="field-group">
         <div class="tag-input-row"><input id="e-tag-input" placeholder="Type a tag, press Enter" /></div>
@@ -980,8 +1106,10 @@ function renderList(){
   });
   const open = tasks.filter(t=>t.status!=='done');
   const done = tasks.filter(t=>t.status==='done');
+  const activeLabel = activeFilterLabel();
   return `
   <div class="fade-in">
+    ${activeLabel ? `<div class="active-filter-banner"><span>Showing: <b>${escapeHTML(activeLabel)}</b></span><button id="clear-active-filter">Clear</button></div>` : ''}
     ${renderFilterBar(true)}
     ${open.length ? `<div class="section-label">Open · ${open.length}</div>${open.map(t=>taskRowHTML(t)).join('')}` : ''}
     ${done.length ? `<div class="section-label">Done · ${done.length}</div>${done.map(t=>taskRowHTML(t)).join('')}` : ''}
@@ -1077,6 +1205,7 @@ function gridIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fil
 function listIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`; }
 function boardIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>`; }
 function calIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`; }
+function calendarIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`; }
 function chevLeft(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`; }
 function chevRight(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>`; }
 
@@ -1093,6 +1222,7 @@ function editTask(id){
     recurrence: task.recurrence || 'none',
     tags: [...(task.tags||[])],
   };
+  pushNavState('edit');
   render();
 }
 function cancelEdit(){ state.editingId = null; state.editDraft = null; render(); }
@@ -1148,8 +1278,9 @@ function attachSwipeEvents(){
         toggleDone(id, row);
         setTimeout(()=>{ row.style.transform='translateX(0)'; if(bgComplete) bgComplete.style.opacity=0; }, 180);
       } else if(isHorizontal && dx < -threshold){
-        row.style.transform = `translateX(-140px)`;
-        setTimeout(()=>{ deleteTaskWithUndo(id); }, 120);
+        row.style.transform = 'translateX(0)';
+        if(bgDelete) bgDelete.style.opacity = 0;
+        requestDelete(id);
       } else {
         row.style.transform = 'translateX(0)';
         if(bgComplete) bgComplete.style.opacity = 0;
@@ -1180,8 +1311,30 @@ function attachGlobalEvents(){
   });
 
   document.querySelectorAll('.tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{ state.view = tab.dataset.view; render(); });
+    tab.addEventListener('click', ()=>{
+      const view = tab.dataset.view;
+      if(view === state.view) return;
+      state.view = view;
+      if(view !== 'dashboard') pushNavState('view:'+view);
+      render();
+    });
   });
+
+  /* ---- dashboard stat cards & category legend: click to drill into the filtered list ---- */
+  document.querySelectorAll('[data-stat]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const kind = card.dataset.stat;
+      if(kind==='stamped-today') goToFilteredList({ completedToday:true, status:'done' });
+      else if(kind==='overdue') goToFilteredList({ overdueOnly:true });
+      else if(kind==='due-soon') goToFilteredList({ dueSoon:true });
+      else if(kind==='streak') goToFilteredList({ status:'done' });
+    });
+  });
+  document.querySelectorAll('.legend-item[data-cat]').forEach(item=>{
+    item.addEventListener('click', ()=>{ goToFilteredList({ category: item.dataset.cat }); });
+  });
+  const clearActive = document.getElementById('clear-active-filter');
+  if(clearActive) clearActive.addEventListener('click', ()=>{ resetFilters(); render(); });
 
   /* ---- quick add: title input opens the composer sheet ---- */
   const qaInput = document.getElementById('quickadd-input');
@@ -1204,7 +1357,7 @@ function attachGlobalEvents(){
   document.querySelectorAll('.task-row').forEach(row=>{
     const id = row.dataset.id;
     row.querySelectorAll('[data-action="toggle"]').forEach(el=>el.addEventListener('click', ()=>toggleDone(id, row)));
-    row.querySelector('[data-action="delete"]')?.addEventListener('click', (e)=>{ e.stopPropagation(); deleteTaskWithUndo(id); });
+    row.querySelector('[data-action="delete"]')?.addEventListener('click', (e)=>{ e.stopPropagation(); requestDelete(id); });
     row.querySelector('[data-action="edit"]')?.addEventListener('click', (e)=>{ e.stopPropagation(); editTask(id); });
     row.querySelector('[data-action="save-edit"]')?.addEventListener('click', (e)=>{ e.stopPropagation(); saveEdit(id); });
     row.querySelector('[data-action="cancel-edit"]')?.addEventListener('click', (e)=>{ e.stopPropagation(); cancelEdit(); });
@@ -1219,6 +1372,8 @@ function attachGlobalEvents(){
       if(eCat) eCat.addEventListener('change', ()=>{ state.editDraft.category = eCat.value; });
       const eDue = row.querySelector('#e-due');
       if(eDue) eDue.addEventListener('change', ()=>{ state.editDraft.due = eDue.value || null; });
+      const eRecurrence = row.querySelector('#e-recurrence');
+      if(eRecurrence) eRecurrence.addEventListener('change', ()=>{ state.editDraft.recurrence = eRecurrence.value; });
       row.querySelectorAll('#e-priority button').forEach(btn=>{
         btn.addEventListener('click', ()=>{ state.editDraft.priority = btn.dataset.p; render(); });
       });
@@ -1264,7 +1419,12 @@ function attachGlobalEvents(){
   const calNext = document.getElementById('cal-next');
   if(calNext) calNext.addEventListener('click', ()=>{ state.calendarMonth = new Date(state.calendarMonth.getFullYear(), state.calendarMonth.getMonth()+1, 1); render(); });
   document.querySelectorAll('.cal-day[data-day]').forEach(cell=>{
-    cell.addEventListener('click', ()=>{ state.selectedDay = cell.dataset.day===state.selectedDay ? null : cell.dataset.day; render(); });
+    cell.addEventListener('click', ()=>{
+      const wasSelected = cell.dataset.day===state.selectedDay;
+      state.selectedDay = wasSelected ? null : cell.dataset.day;
+      if(!wasSelected) pushNavState('cal-day');
+      render();
+    });
   });
 }
 
